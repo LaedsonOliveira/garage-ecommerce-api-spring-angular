@@ -1,4 +1,4 @@
 package domain.user;
 
-public class RegisterDTO {
+public record RegisterDTO(String login, String password, UserRole role) {
 }

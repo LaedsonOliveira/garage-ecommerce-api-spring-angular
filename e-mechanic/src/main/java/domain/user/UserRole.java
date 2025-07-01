@@ -1,6 +1,7 @@
 package domain.user;
 
-public enum UserRoles {
+//classes enum sao usadas para definir valores e funcoes que nao se alteram
+public enum UserRole {
     ADMIN("admin"),
     USER("user");
 
