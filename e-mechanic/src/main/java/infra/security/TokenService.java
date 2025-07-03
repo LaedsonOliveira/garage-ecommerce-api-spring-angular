@@ -24,7 +24,7 @@ public class TokenService {
     public String generateToken(User user){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            //criando a variavel token que recebe uma reacao do JWT
+            //criando a variavel token que recebe uma geracao do JWT
             String token = JWT.create()
                     //Quem emitiu / quem criou o token
                     .withIssuer("auth-api")
