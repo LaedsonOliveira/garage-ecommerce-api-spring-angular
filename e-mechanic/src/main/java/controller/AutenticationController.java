@@ -1,8 +1,10 @@
 package controller;
 
 import domain.user.AuthenticationDTO;
+import domain.user.LoginResponseDTO;
 import domain.user.RegisterDTO;
 import domain.user.User;
+import infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,8 @@ import repository.UserRepository;
 @RequestMapping("auth")
 public class AutenticationController {
 
+    @Autowired
+    private TokenService tokenService;
     //Essa classe e fornecida pelo SPRing Boot Para fazer a autenticacao
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -35,8 +39,11 @@ public class AutenticationController {
         //e necessario autenticar o usuario e senha
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
+        //Ele pega o encode feito pelo auth, pega o usuario principal, colocasse o (user) para fazer um casting
+        var token = tokenService.generateToken((User)auth.getPrincipal());
+
         //Vai retornar
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")

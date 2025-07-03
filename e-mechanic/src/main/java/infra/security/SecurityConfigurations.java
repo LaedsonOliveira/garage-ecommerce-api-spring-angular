@@ -1,5 +1,6 @@
 package infra.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,12 +12,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.concurrent.ExecutionException;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
+
+    @Autowired
+    SecurityFilter securityFilter;
 
     //Serve para que o SB consiga instanciar a classe
     @Bean
@@ -37,6 +42,8 @@ public class SecurityConfigurations {
                         //Para qualquer outro request so e necessario que seja autenticado, nao precisa de role
                         .anyRequest().authenticated()
                 )
+                //Adicionar um filtro antes dos filtros anteriores, faz a verificacao se o endpoint esta aberto ou nao
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 //Criar o objeto
                 .build();
     }
